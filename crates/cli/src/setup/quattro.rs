@@ -90,7 +90,7 @@ const VIEW_TIMER: &str = r"  // omarchy-presence-unlock:view
 
 const VIEW_KEY_PRESS: &str = r"        Keys.onPressed: function(event) {
           root.wakeRequested()
-          if (event.key === Qt.Key_Alt) {
+          if (event.key === Qt.Key_Alt || event.key === Qt.Key_AltGr) {
             if (!event.isAutoRepeat) presenceHoldTimer.start()
             event.accepted = true
             return
@@ -100,7 +100,7 @@ const VIEW_KEY_PRESS: &str = r"        Keys.onPressed: function(event) {
 const VIEW_KEY_RELEASE: &str = r"        }
 
         Keys.onReleased: function(event) {
-          if (event.key === Qt.Key_Alt) {
+          if (event.key === Qt.Key_Alt || event.key === Qt.Key_AltGr) {
             presenceHoldTimer.stop()
             event.accepted = true
           }
@@ -611,7 +611,7 @@ mod tests {
         for expected in [
             VIEW_MARKER,
             "interval: 400",
-            "event.key === Qt.Key_Alt",
+            "event.key === Qt.Key_Alt || event.key === Qt.Key_AltGr",
             "Keys.onReleased",
             "presenceIndicator",
         ] {
