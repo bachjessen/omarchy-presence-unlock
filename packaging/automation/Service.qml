@@ -471,9 +471,24 @@ Item {
     // A long timer gap usually indicates suspend, resume, or shell
     // starvation. Require fresh ALLOW evidence before acting again.
     if (lastPollAt !== 0 && now - lastPollAt > 4000) {
+      var lock = lockService()
+
       resetEvidence(true)
-      lockedByAutomation = false
-      logEvent("reset: timer-gap")
+
+      // Creating the lock can briefly delay this timer. Preserve ownership
+      // while that automation-created lock is still active, so approach wake
+      // and automatic unlock remain available when polling resumes.
+      if (!lock || !lock.locked) {
+        lockedByAutomation = false
+        automaticLockAt = 0
+        automaticLockHadRssi = false
+        arrivalWakeSent = false
+      }
+
+      logEvent(
+        "reset: timer-gap"
+        + (lockedByAutomation ? " preserving-auto-lock" : "")
+      )
     }
 
     lastPollAt = now
