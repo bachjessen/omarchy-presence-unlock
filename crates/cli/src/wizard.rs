@@ -1845,7 +1845,7 @@ fn uninstall(screen: &Screen) -> Action {
 
 const LOCK_DELAYS: [i64; 5] = [3, 5, 10, 15, 30];
 const NO_DEVICE_DELAYS: [i64; 4] = [15, 30, 45, 60];
-const UNLOCK_DELAYS: [i64; 4] = [0, 1, 2, 3];
+const UNLOCK_DELAYS: [i64; 3] = [1, 2, 3];
 const LOCK_THRESHOLDS: [i64; 9] = [-50, -55, -60, -65, -70, -75, -80, -85, -90];
 const UNLOCK_THRESHOLDS: [i64; 8] = [-80, -75, -70, -65, -60, -55, -50, -45];
 
