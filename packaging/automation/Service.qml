@@ -45,6 +45,7 @@ Item {
   property bool responseSeen: false
 
   property double absentSince: 0
+  property string departureReason: ""
   property double allowedSince: 0
   property double cooldownUntil: 0
   property double lastPollAt: 0
@@ -80,6 +81,7 @@ Item {
 
   function resetEvidence(disarm) {
     absentSince = 0
+    departureReason = ""
     allowedSince = 0
 
     if (disarm) armed = false
@@ -428,25 +430,33 @@ Item {
       }
 
       absentSince = 0
+      departureReason = ""
       return
     }
 
     var requiredDelay =
       measuredAway ? lockAfterMs : noDeviceLockAfterMs
 
-    if (absentSince === 0) {
+    var currentDepartureReason =
+      measuredAway ? "weak-rssi" : "no-device"
+
+    // Each evidence type owns its countdown. A partial no-device
+    // countdown cannot become an already-expired weak-RSSI countdown.
+    if (absentSince === 0
+        || departureReason !== currentDepartureReason) {
       absentSince = now
+      departureReason = currentDepartureReason
       logEvent(
         "absence-started: lock-in="
         + Math.round(requiredDelay / 1000)
-        + "s"
-        + (measuredAway ? " reason=weak-rssi" : " reason=no-device")
+        + "s reason="
+        + departureReason
       )
-      return
     }
 
     if (now - absentSince >= requiredDelay) {
       absentSince = 0
+      departureReason = ""
       requestAutomaticLock(now)
     }
   }
