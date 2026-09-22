@@ -26,11 +26,11 @@ Item {
   property bool suspendWhenWatchLocked: true
   property bool suspendedForWatchLock: false
 
-  property int lockAfterMs: 30000
-  property int unlockAfterMs: 2000
+  property int lockAfterMs: 15000
+  property int unlockAfterMs: 1000
   property int cooldownMs: 10000
   property int noDeviceLockAfterMs: 30000
-  property int lockRssi: -65
+  property int lockRssi: -85
   property int wakeRssi: -75
   property int unlockRssi: -55
 
@@ -92,11 +92,11 @@ Item {
     autoUnlockEnabled = false
     unlockOnlyAfterAutoLock = true
     suspendWhenWatchLocked = true
-    lockAfterMs = 30000
-    unlockAfterMs = 2000
+    lockAfterMs = 15000
+    unlockAfterMs = 1000
     cooldownMs = 10000
     noDeviceLockAfterMs = 30000
-    lockRssi = -65
+    lockRssi = -85
     wakeRssi = -85
     unlockRssi = -55
     approachDeltaDb = 3

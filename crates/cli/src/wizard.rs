@@ -1868,11 +1868,11 @@ fn automation_defaults() -> serde_json::Map<String, serde_json::Value> {
         ("auto_unlock".into(), false.into()),
         ("unlock_only_after_auto_lock".into(), true.into()),
         ("suspend_when_watch_locked".into(), true.into()),
-        ("lock_after_seconds".into(), 5.into()),
+        ("lock_after_seconds".into(), 15.into()),
         ("no_device_lock_after_seconds".into(), 30.into()),
         ("unlock_after_seconds".into(), 1.into()),
         ("cooldown_seconds".into(), 10.into()),
-        ("lock_rssi".into(), (-60).into()),
+        ("lock_rssi".into(), (-85).into()),
         ("wake_rssi".into(), (-85).into()),
         ("approach_delta_db".into(), 3.into()),
         ("unlock_rssi".into(), (-55).into()),
@@ -2125,6 +2125,56 @@ pub fn run() -> Result<(), String> {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn proximity_automation_defaults_to_off() {
+        let config = automation_defaults();
+
+        assert_eq!(
+            config.get("auto_lock").and_then(serde_json::Value::as_bool),
+            Some(false)
+        );
+        assert_eq!(
+            config
+                .get("auto_unlock")
+                .and_then(serde_json::Value::as_bool),
+            Some(false)
+        );
+        assert_eq!(
+            config
+                .get("suspend_when_watch_locked")
+                .and_then(serde_json::Value::as_bool),
+            Some(true)
+        );
+        assert_eq!(
+            config
+                .get("unlock_only_after_auto_lock")
+                .and_then(serde_json::Value::as_bool),
+            Some(true)
+        );
+        assert_eq!(
+            config
+                .get("lock_after_seconds")
+                .and_then(serde_json::Value::as_i64),
+            Some(15)
+        );
+        assert_eq!(
+            config.get("lock_rssi").and_then(serde_json::Value::as_i64),
+            Some(-85)
+        );
+        assert_eq!(
+            config
+                .get("no_device_lock_after_seconds")
+                .and_then(serde_json::Value::as_i64),
+            Some(30)
+        );
+        assert_eq!(
+            config
+                .get("unlock_rssi")
+                .and_then(serde_json::Value::as_i64),
+            Some(-55)
+        );
+    }
 
     #[test]
     fn signal_quality_reads_the_bands_the_picker_shows() {
